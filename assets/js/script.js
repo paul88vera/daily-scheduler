@@ -1,6 +1,4 @@
-// TODO: Set calendar clock to change colors for past, present, future
-var save = $(".saveBtn");
-
+// function to get value from textarea
 var save = function () {
   var number9 = localStorage.getItem("number9");
   $("#9").val(number9);
@@ -21,52 +19,35 @@ var save = function () {
   var number17 = localStorage.getItem("number17");
   $("#17").val(number17);
 };
-
+// function to set textarea content on click
 $(".saveBtn").click(function () {
   var textarea = $(this).siblings("textarea")[0].value;
   var idSelect = $(this).siblings("textarea")[0].id;
-
   localStorage.setItem("number" + idSelect, textarea);
 });
-
-var idArr = [
-  parseInt($("textarea")[0].id),
-  parseInt($("textarea")[1].id),
-  parseInt($("textarea")[2].id),
-  parseInt($("textarea")[3].id),
-  parseInt($("textarea")[4].id),
-  parseInt($("textarea")[5].id),
-  parseInt($("textarea")[6].id),
-  parseInt($("textarea")[7].id),
-  parseInt($("textarea")[8].id),
-];
-
+// pulls current hour using moment.js
 var CurrentHour = moment().hour();
-
-console.log("Current hour is " + CurrentHour);
-
-var verify = function () {
-  idArr.forEach(id => {
-    var textArea = $(".col-8");
-
-    if (CurrentHour === id) {
-      textArea.addClass("present");
-      textArea.removeClass("past");
-      textArea.removeClass("future");
-      console.log("present");
-    } else if (CurrentHour < id) {
-      textArea.addClass("future");
-      textArea.removeClass("present");
-      textArea.removeClass("past");
-      console.log("future");
+// function to verify hour with ID
+var verifyTime = function () {
+  var textArea = $("textarea");
+  var lengthArr = [0, 1, 2, 3, 4, 5, 6, 7, 8]; // array of textarea elements
+  for (var i = 0; i < lengthArr.length; i++) {
+    var idLoop = textArea[i]; // iterable variable to loop through ID's
+    if (CurrentHour === i + 9) {
+      // +9 was used to match textarea Id's
+      idLoop.classList.add("present");
+      idLoop.classList.remove("future");
+      idLoop.classList.remove("past");
+    } else if (CurrentHour < i + 9) {
+      idLoop.classList.add("future");
+      idLoop.classList.remove("present");
+      idLoop.classList.remove("past");
     } else {
-      textArea.addClass("past");
-      textArea.removeClass("future");
-      textArea.removeClass("present");
-      console.log("past");
+      idLoop.classList.add("past");
+      idLoop.classList.remove("future");
+      idLoop.classList.remove("present");
     }
-    console.log(id);
-  });
+  }
 };
+verifyTime();
 save();
-verify();
